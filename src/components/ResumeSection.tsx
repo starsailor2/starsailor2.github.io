@@ -1,48 +1,21 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, ExternalLink, Calendar, MapPin } from "lucide-react";
-import { useState } from "react";
 
 const ResumeSection = () => {
-  const [downloadStatus, setDownloadStatus] = useState('');
 
-  const handleDownload = async () => {
-    try {
-      setDownloadStatus('Downloading...');
-      
-      // Try direct download first (simpler approach)
-      const link = document.createElement('a');
-      link.href = '/resume.pdf';
-      link.download = 'Rishav_Raj_Resume.pdf';
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      setDownloadStatus('Download initiated successfully!');
-      setTimeout(() => setDownloadStatus(''), 3000);
-    } catch (error) {
-      setDownloadStatus('Error: Unable to download resume. Please try the View Online option or contact support.');
-      setTimeout(() => setDownloadStatus(''), 5000);
-    }
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Rishav_Raj_Resume.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  const handlePreview = async () => {
-    try {
-      setDownloadStatus('Opening preview...');
-      
-      // Try to open in new window
-      const newWindow = window.open('/resume.pdf', '_blank', 'noopener,noreferrer');
-      
-      if (!newWindow) {
-        throw new Error('Pop-up blocked');
-      }
-      
-      setDownloadStatus('');
-    } catch (error) {
-      setDownloadStatus('Error: Pop-up blocked or file unavailable. Please check your browser settings or try downloading instead.');
-      setTimeout(() => setDownloadStatus(''), 5000);
-    }
+  const handlePreview = () => {
+    window.open('/resume.pdf', '_blank', 'noopener,noreferrer');
   };
   const experiences = [
     {
@@ -94,54 +67,22 @@ const ResumeSection = () => {
         </p>
         
         {/* Download Resume Button */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex justify-center gap-4">
-            <Button 
-              className="google-btn-primary" 
-              onClick={handleDownload}
-              disabled={downloadStatus.includes('Downloading') || downloadStatus.includes('Opening')}
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
-            </Button>
-            <Button 
-              variant="outline" 
-              className="google-btn"
-              onClick={handlePreview}
-              disabled={downloadStatus.includes('Downloading') || downloadStatus.includes('Opening')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              View Online
-            </Button>
-          </div>
-          
-          {/* Fallback direct link */}
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground mb-2">
-              If the buttons above don't work, try this direct link:
-            </p>
-            <a 
-              href="/resume.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline"
-            >
-              Direct PDF Link
-            </a>
-          </div>
-          
-          {/* Status message */}
-          {downloadStatus && (
-            <div className={`text-sm px-4 py-2 rounded-lg max-w-md text-center ${
-              downloadStatus.includes('Error') 
-                ? 'text-red-600 bg-red-50 border border-red-200' 
-                : downloadStatus.includes('success')
-                ? 'text-green-600 bg-green-50 border border-green-200'
-                : 'text-blue-600 bg-blue-50 border border-blue-200'
-            }`}>
-              {downloadStatus}
-            </div>
-          )}
+        <div className="flex justify-center gap-4">
+          <Button 
+            className="google-btn-primary" 
+            onClick={handleDownload}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Download PDF
+          </Button>
+          <Button 
+            variant="outline" 
+            className="google-btn"
+            onClick={handlePreview}
+          >
+            <ExternalLink className="w-4 h-4 mr-2" />
+            View Online
+          </Button>
         </div>
       </div>
 
